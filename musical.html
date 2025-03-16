@@ -51,6 +51,7 @@
       }
 
       table {
+        table-layout: fixed;
         width: 100%; /* 기본적으로 80% 너비 */
         max-width: 900px;
         border-collapse: collapse;
@@ -1062,11 +1063,11 @@
 
           rows.forEach((row) => {
             if (isFiltering) {
-              row.style.display = row.classList.contains("selected")
-                ? "table-row"
-                : "none";
+              row.style.visibility = row.classList.contains("selected")
+                ? "visible"
+                : "collapse";
             } else {
-              row.style.display = "table-row";
+              row.style.visibility = "visible";
             }
           });
 
