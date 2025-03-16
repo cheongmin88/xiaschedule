@@ -114,6 +114,18 @@
         width: 20px;
       }
 
+      .upbutton {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        border: 3px solid green;
+        font-size: 25px;
+        color: green;
+      }
+
       /* 스마트폰 화면 최적화 */
       @media screen and (max-width: 768px) {
         body {
@@ -129,7 +141,7 @@
         th,
         td {
           padding: 6px;
-          min-width: 30px;
+          min-width: 80px;
           vertical-align: middle;
         }
         .btn {
@@ -143,7 +155,7 @@
       }
     </style>
   </head>
-  <body>
+  <body id="top">
     <img src="https://www.aladdinthemusical.co.kr/Contents/Images/logo.png" />
     <h1>Musical Aladin</h1>
 
@@ -1028,6 +1040,9 @@
         >뮤직오브더나잇</a
       >
     </div>
+    <a href="#top">
+      <button class="upbutton">&uarr;</button>
+    </a>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const rows = document.querySelectorAll("#scheduleTable tr");
