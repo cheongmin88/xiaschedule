@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XIA SCHEDULE</title>
+    <link rel="icon" href="xia.png" type="image/png" />
+    <meta property="og:title" content="XIA SCHEDULE" />
+    <meta property="og:description" content="XIA SCHEDULE" />
+    <meta property="og:image" content="xia.png" />
+    <style>
+      body {
+        /* background-image: url(aladin.jpg); */
+        background-color: rgb(138, 38, 138);
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        padding: 20px;
+        text-align: center;
+      }
+      h1 {
+        text-align: center;
+        color: white;
+      }
+      p {
+        text-align: center;
+        color: white;
+      }
+      .button-container {
+        /* position: sticky; */
+        /* top: 0; */
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      .btn {
+        padding: 10px 15px;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+      }
+      .save-btn {
+        background-color: #ffcc00;
+        color: black;
+      }
+      .save-btn:hover {
+        background-color: #e6b800;
+      }
+      .filter-btn {
+        background-color: #ffcc00;
+        color: black;
+      }
+      .filter-btn:hover {
+        background-color: #e6b800;
+      }
+
+      /* 테이블 컨테이너 (항상 가운데 정렬) */
+      .table-container {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+
+      table {
+        table-layout: fixed;
+        width: 100%; /* 기본적으로 80% 너비 */
+        max-width: 900px;
+        border-collapse: collapse;
+        background-color: #50108b;
+        color: white;
+      }
+      th {
+        font-size: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+      }
+      th {
+        color: white;
+      }
+      .redday {
+        color: rgb(238, 127, 127);
+      }
+      .blueday {
+        color: rgb(92, 199, 241);
+      }
+      .greenday {
+        color: rgb(120, 218, 120);
+      }
+
+      /* 선택된 행 스타일 */
+      .selected {
+        background-color: #a153eb !important;
+        /* color: black !important; */
+      }
+      .booking-container {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .booking-container h2 {
+        margin-bottom: 10px;
+        font-size: 18px;
+        color: #333;
+      }
+      .booking-btn {
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 5px;
+        min-height: 10px;
+        font-size: 16px;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        background-color: #0056b3;
+      }
+
+      .booking-btn:hover {
+        opacity: 0.8;
+      }
+
+      .special {
+        color: #e6b800;
+        font-size: 10px;
+        width: 20px;
+      }
+
+      .topbtn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        border: 3px solid rgb(209, 129, 224);
+        font-size: 25px;
+        color: rgb(209, 129, 224);
+      }
+
+      /* 스마트폰 화면 최적화 */
+      @media screen and (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+        .logo {
+          height: 80px;
+        }
+        h1 {
+          font-size: 20px;
+        }
+        p {
+          font-size: 12px;
+          margin: 2px;
+        }
+        table {
+          width: 100%; /* 화면 크기에 맞춰 꽉 차게 */
+        }
+        th,
+        td {
+          font-size: 8px; /* 글자 크기 줄임 */
+          padding: 5px 2px;
+          min-width: 100px;
+          vertical-align: middle;
+        }
+        .special {
+          font-size: 8px;
+        }
+        .btn {
+          font-size: 12px;
+          padding: 6px 10px;
+        }
+        .booking-btn {
+          font-size: 8px;
+          padding: 6px 9px;
+        }
+      }
+    </style>
+  </head>
+  <body id="top">
+    <header>
+      <!-- <p>알라딘</p> -->
+    </header>
+    <main>
+      <img
+        src="https://www.aladdinthemusical.co.kr/Contents/Images/logo.png"
+        class="logo"
+      />
+      <!-- <h1>Musical Aladin</h1> -->
+      <p>🚩장소 : 샤롯데씨어터</p>
+      <p>📅공연기간 : 2024.11.22 ~ 2025.06.22</p>
+
+      <!-- 버튼 -->
+      <div class="button-container">
+        <button class="btn save-btn" id="saveButton">관극 일정 저장</button>
+        <button class="btn filter-btn" id="filterButton">
+          내 관극 일정 보기
+        </button>
+      </div>
+
+      <!-- 테이블 컨테이너 -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>날짜</th>
+              <th>시간</th>
+              <th>알라딘</th>
+              <th>지니</th>
+              <th>자스민</th>
+              <th>술탄</th>
+              <th>자파</th>
+              <th>밥칵</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleTable">
+            <tr data-id="1">
+              <td class="special">프리뷰</td>
+              <td class="redday">11/17(일)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="2">
+              <td class="special">프리뷰</td>
+              <td>11/21(목)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>최지혜</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="3">
+              <td class="special"></td>
+              <td>11/22(금)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="4">
+              <td class="special"></td>
+              <td class="blueday">11/23(토)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="5">
+              <td class="special"></td>
+              <td class="redday">11/24(일)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="6">
+              <td class="special"></td>
+              <td>11/27(수)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="7">
+              <td class="special"></td>
+              <td>11/28(목)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>최지혜</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="8">
+              <td class="special"></td>
+              <td>11/29(금)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="9">
+              <td class="special"></td>
+              <td class="blueday">11/30(토)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>이성경</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="10">
+              <td class="special"></td>
+              <td>12/03(화)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="11">
+              <td class="special"></td>
+              <td class="greenday">12/06(금)</td>
+              <td>14:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="12">
+              <td class="special"></td>
+              <td>12/06(금)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="13">
+              <td class="special"></td>
+              <td class="blueday">12/07(토)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>이성경</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="14">
+              <td class="special"></td>
+              <td>12/10(화)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="15">
+              <td class="special"></td>
+              <td>12/11(수)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>이성경</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="16">
+              <td class="special">전관</td>
+              <td>12/12(목)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="17">
+              <td class="special"></td>
+              <td>12/17(화)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="18">
+              <td class="special"></td>
+              <td class="greenday">12/20(금)</td>
+              <td>14:30</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="19">
+              <td class="special"></td>
+              <td class="redday">12/22(일)</td>
+              <td>15:00</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="20">
+              <td class="special"></td>
+              <td class="redday">12/25(수)</td>
+              <td>14:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="21">
+              <td class="special"></td>
+              <td>12/27(금)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="22">
+              <td class="special"></td>
+              <td class="blueday">12/28(토)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>최지혜</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="23">
+              <td class="special"></td>
+              <td>12/31(화)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="24">
+              <td class="special">TICKET DAY</td>
+              <td class="blueday">01/04(토)</td>
+              <td>14:00</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="25">
+              <td class="special"></td>
+              <td class="redday">01/05(일)</td>
+              <td>15:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>이성경</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="26">
+              <td class="special"></td>
+              <td>01/08(수)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="27">
+              <td class="special"></td>
+              <td class="blueday">01/11(토)</td>
+              <td>14:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="28">
+              <td class="special"></td>
+              <td class="blueday">01/11(토)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="29">
+              <td class="special"></td>
+              <td class="greenday">01/17(금)</td>
+              <td>14:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="30">
+              <td class="special">YES24 DAY</td>
+              <td class="blueday">01/18(토)</td>
+              <td>14:00</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>이성경</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="31">
+              <td class="special">YES24 DAY</td>
+              <td class="redday">01/19(일)</td>
+              <td>15:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="32">
+              <td class="special"></td>
+              <td>01/21(화)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="33">
+              <td class="special"></td>
+              <td class="greenday">01/24(금)</td>
+              <td>14:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>최지혜</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="34">
+              <td class="special"></td>
+              <td class="blueday">01/25(토)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="35">
+              <td class="special"></td>
+              <td>01/29(수)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>최지혜</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="36">
+              <td class="special"></td>
+              <td class="blueday">02/01(토)</td>
+              <td>14:00</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>이성경</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="37">
+              <td class="special">빗썸 전관</td>
+              <td class="redday">02/02(일)</td>
+              <td>15:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="38">
+              <td class="special"></td>
+              <td>02/05(수)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="39">
+              <td class="special"></td>
+              <td class="greenday">02/07(금)</td>
+              <td>14:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="40">
+              <td class="special"></td>
+              <td>02/11(화)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="41">
+              <td class="special"></td>
+              <td class="greenday">02/14(금)</td>
+              <td>14:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>이성경</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="42">
+              <td class="special"></td>
+              <td class="blueday">02/15(토)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="43">
+              <td class="special"></td>
+              <td>02/19(수)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="44">
+              <td class="special"></td>
+              <td>02/21(금)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="45">
+              <td class="special"></td>
+              <td class="redday">02/23(일)</td>
+              <td>15:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="46">
+              <td class="special"></td>
+              <td>02/25(화)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="47">
+              <td class="special"></td>
+              <td>02/28(금)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="48">
+              <td class="special"></td>
+              <td class="redday">03/02(일)</td>
+              <td>14:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>최지혜</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="49">
+              <td class="special"></td>
+              <td>03/06(목)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>최지혜</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="50">
+              <td class="special"></td>
+              <td class="blueday">03/08(토)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="51">
+              <td class="special"></td>
+              <td>03/14(금)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>이성경</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="52">
+              <td class="special"></td>
+              <td class="redday">03/16(일)</td>
+              <td>15:00</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="53">
+              <td class="special"></td>
+              <td class="greenday">03/19(수)</td>
+              <td>14:30</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>최지혜</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="54">
+              <td class="special"></td>
+              <td class="blueday">03/22(토)</td>
+              <td>14:00</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>이성경</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="55">
+              <td class="special"></td>
+              <td class="greenday">03/28(금)</td>
+              <td>14:30</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>최지혜</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="56">
+              <td class="special"></td>
+              <td>03/28(금)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="57">
+              <td class="special"></td>
+              <td class="redday">03/30(일)</td>
+              <td>15:00</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="58">
+              <td class="special"></td>
+              <td class="greenday">04/04(금)</td>
+              <td>14:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="59">
+              <td class="special"></td>
+              <td class="blueday">04/05(토)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>최지혜</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="60">
+              <td class="special"></td>
+              <td class="greenday">04/09(수)</td>
+              <td>14:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="61">
+              <td class="special"></td>
+              <td class="greenday">04/11(금)</td>
+              <td>14:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="62">
+              <td class="special">전관</td>
+              <td class="blueday">04/12(토)</td>
+              <td>14:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="63">
+              <td class="special">INTERPARK STAGE</td>
+              <td>04/16(수)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>이성경</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="64">
+              <td class="special"></td>
+              <td class="blueday">04/19(토)</td>
+              <td>19:00</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="65">
+              <td class="special"></td>
+              <td>04/22(화)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="66">
+              <td class="special"></td>
+              <td>04/23(수)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="67">
+              <td class="special"></td>
+              <td>04/29(화)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="68">
+              <td class="special"></td>
+              <td class="blueday">05/03(토)</td>
+              <td>14:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="69">
+              <td class="special"></td>
+              <td>05/05(월)</td>
+              <td>14:00</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>민경아</td>
+              <td>황만익</td>
+              <td>임별</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="70">
+              <td class="special"></td>
+              <td class="greenday">05/09(금)</td>
+              <td>14:30</td>
+              <td>김준수</td>
+              <td>정성화</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="71">
+              <td class="special"></td>
+              <td class="redday">05/11(일)</td>
+              <td>15:00</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="72">
+              <td class="special"></td>
+              <td>05/14(수)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>이성경</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="73">
+              <td class="special"></td>
+              <td class="blueday">05/17(토)</td>
+              <td>14:00</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>최지혜</td>
+              <td>이상준</td>
+              <td>임별</td>
+              <td>방보용</td>
+            </tr>
+            <tr data-id="74">
+              <td class="special"></td>
+              <td>05/20(화)</td>
+              <td>19:30</td>
+              <td>김준수</td>
+              <td>정원영</td>
+              <td>민경아</td>
+              <td>이상준</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+            <tr data-id="75">
+              <td class="special"></td>
+              <td class="blueday">05/24(토)</td>
+              <td>14:00</td>
+              <td>김준수</td>
+              <td>강홍석</td>
+              <td>이성경</td>
+              <td>황만익</td>
+              <td>윤선용</td>
+              <td>양병철</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <p>
+          * 캐스팅 스케줄은 배우 및 제작사의 사정에 의해 사전 공지없이 변경될 수
+          있습니다.
+        </p>
+      </div>
+      <!-- 예매 버튼 -->
+      <div class="booking-container">
+        <span style="color: white; font-size: 14px">🎟️ 예매하기</span>
+        <a
+          href="https://tickets.interpark.com/goods/24012498"
+          target="_blank"
+          class="booking-btn interpark"
+          >인터파크</a
+        >
+        <a
+          href="http://ticket.yes24.com/Perf/50841"
+          target="_blank"
+          class="booking-btn yes24"
+          >예스24</a
+        >
+        <a
+          href="https://www.charlottetheater.co.kr/performence/current.asp"
+          target="_blank"
+          class="booking-btn charlotte"
+          >샤롯데</a
+        >
+        <a
+          href="https://www.aladdinthemusical.co.kr/"
+          target="_blank"
+          class="booking-btn mom"
+          >뮤직오브더나잇</a
+        >
+      </div>
+      <a href="#top">
+        <button class="topbtn">&uarr;</button>
+      </a>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const rows = document.querySelectorAll("#scheduleTable tr");
+          const saveButton = document.getElementById("saveButton");
+          const filterButton = document.getElementById("filterButton");
+
+          // 이전 저장 상태 불러오기
+          rows.forEach((row) => {
+            const id = row.getAttribute("data-id");
+            const isSelected =
+              localStorage.getItem(`selected-row-${id}`) === "true";
+            if (isSelected) {
+              row.classList.add("selected");
+            }
+
+            // 행 클릭 시 선택/해제
+            row.addEventListener("click", function () {
+              row.classList.toggle("selected");
+            });
+          });
+
+          // 저장 버튼 클릭 시, 선택 상태 저장
+          saveButton.addEventListener("click", function () {
+            rows.forEach((row) => {
+              const id = row.getAttribute("data-id");
+              const isSelected = row.classList.contains("selected");
+              localStorage.setItem(`selected-row-${id}`, isSelected);
+            });
+            alert("선택한 공연이 저장되었습니다! ✅");
+          });
+
+          // 필터 버튼 클릭 시, 선택한 공연만 보기
+          let isFiltering = false;
+
+          filterButton.addEventListener("click", function () {
+            isFiltering = !isFiltering;
+
+            rows.forEach((row) => {
+              if (isFiltering) {
+                row.style.visibility = row.classList.contains("selected")
+                  ? "visible"
+                  : "collapse";
+              } else {
+                row.style.visibility = "visible";
+              }
+            });
+
+            filterButton.textContent = isFiltering
+              ? "전체 일정 보기"
+              : "내 관극 일정 보기";
+          });
+        });
+      </script>
+    </main>
+    <footer>
+      <p></p>
+      <p></p>
+      <p></p>
+      <p style="color: darkgray; font-size: 10px">@xiahaerang</p>
+    </footer>
+  </body>
+</html>
