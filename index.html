@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>공연 일정</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+      }
+
+      #content {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1>공연 선택</h1>
+      <button onclick="loadContent('aladdin')">알라딘</button>
+      <button onclick="loadContent('dracula')">드라큘라</button>
+      <button onclick="loadContent('deathnote')">데스노트</button>
+    </div>
+
+    <div id="content">
+      <!-- 공연 내용이 여기에 로드됩니다 -->
+    </div>
+
+    <script>
+      function loadContent(show) {
+        // 콘텐츠를 로딩할 div 요소
+        const contentDiv = document.getElementById("content");
+
+        // 공연 HTML 파일 경로
+        const showPages = {
+          aladdin: "aladdin.html",
+          dracula: "dracula.html",
+          deathnote: "deathnote.html",
+        };
+
+        // 선택된 공연 HTML 파일 경로를 가져옵니다
+        const selectedShow = showPages[show];
+
+        // 해당 HTML 파일을 로딩합니다
+        fetch(selectedShow)
+          .then((response) => response.text())
+          .then((data) => {
+            // 파일을 성공적으로 불러오면 콘텐츠를 삽입
+            contentDiv.innerHTML = data;
+          })
+          .catch((error) => {
+            // 파일 로딩에 실패하면 오류 메시지를 출력
+            contentDiv.innerHTML =
+              "<p>공연 일정을 불러오는 데 오류가 발생했습니다. 다시 시도해주세요.</p>";
+            console.error(error);
+          });
+      }
+    </script>
+  </body>
+</html>
